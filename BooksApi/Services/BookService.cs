@@ -37,7 +37,7 @@ namespace BooksApi.Services
             if (book.Authors.Count > 5)
                 return new ResponseDto(false, "Authors should not be more than 5");
 
-            if (book.Pages < 1)
+            if (!(book.Pages > 1))
                 return new ResponseDto(false, "Pages should be at least 1");
 
             if (!(new List<string> { "Hardcover", "Paperback", "E-book", "Audiobook" }).Contains(book.CoverType))
