@@ -1,4 +1,4 @@
-﻿namespace BooksApi.Models
+﻿namespace BooksApi.DTOs
 {
     public class GetBookResult
     {
@@ -13,6 +13,8 @@
         public int Year { get; set; }
 
         public string ISBN { get; set; }
+
+        public double Price { get; set; }
 
         public IList<string> Authors { get; set; }
     }

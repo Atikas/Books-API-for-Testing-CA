@@ -7,7 +7,8 @@ namespace BooksApi.Services
     public interface IBookService
     {
         ResponseDto AddBook(Book book);
-        Book GetBook(string title);
+        Book? GetBook(string title);
+        Book? GetBook(Guid id);
         void RemoveBook(Guid id);
     }
     public class BookService : IBookService
@@ -56,9 +57,14 @@ namespace BooksApi.Services
             return new ResponseDto(true, id.ToString());
         }
 
-        public Book GetBook(string title)
+        public Book? GetBook(string title)
         {
             return _repository.GetBook(title);
+        }
+
+        public Book? GetBook(Guid id)
+        {
+            return _repository.GetBook(id);
         }
 
         public void RemoveBook(Guid id)

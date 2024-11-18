@@ -18,7 +18,7 @@ namespace BooksApi
         }
 
         //onModelCreating
-        public void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Genre>().HasData(
                 new Genre { Id = new Guid("1"), Name = "Sci-fi" },

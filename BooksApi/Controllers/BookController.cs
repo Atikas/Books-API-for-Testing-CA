@@ -13,23 +13,44 @@ namespace BooksApi.Controllers
     {
         private readonly IBookService _service;
         private readonly IBookMapper _mapper;
+        private readonly IBookPriceExternalClient _priceClient;
 
 
-        public BookController(IBookService service, IBookMapper mapper)
+        public BookController(IBookService service, IBookMapper mapper, IBookPriceExternalClient priceClient)
         {
             _service = service;
             _mapper = mapper;
+            _priceClient = priceClient;
         }
 
 
-        [ProducesResponseType(typeof(GetBookResult), 200)]
         [HttpGet("GetAll")]
-        public ActionResult<Book> GetBooks([FromQuery] string title)
+        [ProducesResponseType(typeof(IEnumerable<GetBookResult>), 200)]
+        public IActionResult GetBooks([FromQuery] string title)
         {
             var books = _service.GetBook(title);
-            var dto = _mapper.Map(books);
+            var dto = _mapper.Map(books!);
             return Ok(dto);
         }
+
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(GetBookResult), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetBook([FromRoute] Guid id)
+        {
+            var book = _service.GetBook(id);
+            if (book is null)
+                return NotFound();
+
+            var dto = _mapper.Map(book);
+            var price = await _priceClient.GetPrice(book.ISBN, "Hardcover");
+            dto.Price = price;
+
+            return Ok(dto);
+        }
+
+
 
         [HttpDelete("Remove")]
         public IActionResult RemoveBook([FromQuery] Guid id)

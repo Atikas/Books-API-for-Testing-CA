@@ -4,7 +4,7 @@ namespace BooksApi.Services.Repositories
 {
     public interface IUserRepository
     {
-        User GetUser(string username);
+        User? GetUser(string username);
         void SaveUser(User user);
     }
     public class UserRepository : IUserRepository
@@ -16,7 +16,7 @@ namespace BooksApi.Services.Repositories
             _context = context;
         }
 
-        public User GetUser(string username)
+        public User? GetUser(string username)
         {
             return _context.Users.SingleOrDefault(x => x.Username == username);
         }

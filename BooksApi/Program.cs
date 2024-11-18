@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using BooksApi;
 using Microsoft.EntityFrameworkCore;
+using BooksApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,12 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookService, BookService>();
 
+
+
 builder.Services.AddTransient<IISBNValidator, ISBNValidator>();
 builder.Services.AddTransient<IBookMapper, BookMapper>();
+
+builder.Services.AddTransient<IBookPriceExternalClient, BookPriceExternalClient>();
 
 
 
@@ -36,6 +41,14 @@ builder.Services.AddSwaggerGen(options =>
     // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
+// Register HttpClient for BooksApiClient
+builder.Services.AddHttpClient<IBookPriceExternalClient, BookPriceExternalClient>(client =>
+{
+    var config = builder.Configuration.GetSection("BooksPricesApi").Get<BooksPriceApiConfig>();
+    client.BaseAddress = new Uri(config!.Url);
+    client.DefaultRequestHeaders.Add("X-API-KEY", config.ApiKey);
 });
 
 //Add DbContext DefaultConnection

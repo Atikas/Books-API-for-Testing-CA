@@ -1,4 +1,5 @@
-﻿using BooksApi.Models;
+﻿using BooksApi.DTOs;
+using BooksApi.Models;
 
 namespace BooksApi.Services
 {
