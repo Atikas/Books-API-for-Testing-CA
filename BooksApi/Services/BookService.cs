@@ -13,11 +13,16 @@ namespace BooksApi.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _repository;
+        private readonly IGenreRepository _genreRepository;
         private readonly IISBNValidator _isbnValidator;
 
-        public BookService(IBookRepository repository)
+        public BookService(IBookRepository repository, 
+            IGenreRepository genreRepository, 
+            IISBNValidator isbnValidator)
         {
             _repository = repository;
+            _genreRepository = genreRepository;
+            _isbnValidator = isbnValidator;
         }
 
         public ResponseDto AddBook(Book book)
@@ -32,7 +37,9 @@ namespace BooksApi.Services
             if (book.Authors.Count > 5)
                 return new ResponseDto(false, "Authors should not be more than 5");
 
-
+            var genre = _genreRepository.Get(book.GenreId);
+            if (genre is null)
+                return new ResponseDto(false, "Genre does not exist");
 
             var isbnValidation = _isbnValidator.Validate(book.ISBN);
 
