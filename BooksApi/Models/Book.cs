@@ -11,6 +11,8 @@ namespace BooksApi.Models
         [Required]
         public string Title { get; set; }
 
+        public string CoverType { get; set; }
+
         public Guid GenreId { get; set; }
 
         public Genre Genre { get; set; }

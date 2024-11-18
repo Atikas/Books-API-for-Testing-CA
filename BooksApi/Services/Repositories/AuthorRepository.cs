@@ -1,6 +1,4 @@
 ﻿using BooksApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BooksApi.Services.Repositories
 {
@@ -8,7 +6,7 @@ namespace BooksApi.Services.Repositories
     {
         IEnumerable<Author> Filter(string firstName, string lastName);
     }
-    public class AuthorRepository: IAuthorRepository
+    public class AuthorRepository : IAuthorRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -18,12 +16,10 @@ namespace BooksApi.Services.Repositories
         }
         public IEnumerable<Author> Filter(string firstName, string lastName)
         {
-            var authors = _context.Authors.Where(a => a.FirstName.Contains(firstName,StringComparison.InvariantCultureIgnoreCase) 
+            var authors = _context.Authors.Where(a => a.FirstName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase)
                                                    || a.LastName.Contains(lastName, StringComparison.InvariantCultureIgnoreCase))
                                           .ToList();
             return authors;
-
-
         }
     }
 }
