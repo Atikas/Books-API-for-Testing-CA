@@ -13,10 +13,11 @@ namespace BooksApi.Services.Repositories
         public AuthorRepository(ApplicationDbContext context)
         {
             _context = context;
+            _context.Database.EnsureCreated();
         }
         public IEnumerable<Author> Filter(string firstName, string lastName)
         {
-            var authors = _context.Authors.Where(a => a.FirstName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase)
+            var authors = _context.Authors.ToList().Where(a => a.FirstName.Contains(firstName, StringComparison.InvariantCultureIgnoreCase)
                                                    || a.LastName.Contains(lastName, StringComparison.InvariantCultureIgnoreCase))
                                           .ToList();
             return authors;

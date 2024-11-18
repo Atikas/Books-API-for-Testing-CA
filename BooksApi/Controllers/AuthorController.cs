@@ -17,7 +17,13 @@ namespace BooksApi.Controllers
         }
 
 
-        
+
+        /// <summary>
+        /// name is a query parameter that is used to filter authors by first name or last name
+        /// it is not case sensitive
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Author>), StatusCodes.Status200OK)]
         public IActionResult GetAuthors([FromQuery][Required] string name)
